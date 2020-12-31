@@ -1,0 +1,30 @@
+{
+    "name": "sharkezz/yeelight-php",
+    "description": "A simple standalone PHP library to work with Yeelight RGB bulbs",
+    "type": "library",
+    "require": {
+        "php": "^7.4|^8.0",
+        "guzzlehttp/guzzle": "^7.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "symfony/var-dumper": "^5.2"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "SharkEzz",
+            "email": "icraft640@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "SharkEzz\\Yeelight\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SharkEzz\\Yeelight\\Tests\\": "tests"
+        }
+    }
+}

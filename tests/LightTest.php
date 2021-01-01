@@ -7,15 +7,20 @@ use SharkEzz\Yeelight\Yeelight;
 
 class LightTest extends TestCase
 {
+    private string $ip = '192.168.0.103';
+
     private Yeelight $light;
 
+    /**
+     * @throws \Exception
+     */
     protected function setUp(): void
     {
         parent::setUp();
         /**
          * You must use a real Yeelight RGB light in order to run this tests and it must be turned on
          */
-        $this->light = new Yeelight('192.168.0.103');
+        $this->light = new Yeelight($this->ip);
     }
 
     public function testCanSeeIfLightIsOnline(): void
@@ -25,7 +30,7 @@ class LightTest extends TestCase
 
     public function testLightCanChangeColor(): void
     {
-        $this->light->setColor(0xFF8888);
+        $this->light->setColor(0xFF0000);
         $this->assertTrue($this->light->commit());
     }
 

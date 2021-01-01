@@ -20,6 +20,12 @@ class Yeelight implements YeelightInterface
         'set_rgb'
     ];
 
+    public const ALLOWED_PROPS = [
+        'bright',
+        'rgb',
+        'name'
+    ];
+
     /**
      * @var resource
      */
@@ -87,6 +93,31 @@ class Yeelight implements YeelightInterface
 
     /**
      * @inheritDoc
+     */
+    public function getBrightness(): int
+    {
+        // TODO: Implement getBrightness() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getColor(): string
+    {
+        // TODO: Implement getColor() method.
+    }
+
+    /**
+     * @inheritDoc
+     * @throws Exception
+     */
+    public function getName(): string
+    {
+        // TODO: Implement getName() method.
+    }
+
+    /**
+     * @inheritDoc
      * @throws Exception
      */
     public function setColor(int $hexColor): self
@@ -115,17 +146,23 @@ class Yeelight implements YeelightInterface
         return $this;
     }
 
+    public function setName(string $name): YeelightInterface
+    {
+        // TODO: Implement setName() method.
+    }
+
     /**
      * @throws Exception
      */
     public function commit(): bool
     {
-        $success = true;
+        $success = false;
 
         foreach ($this->jobs as $job)
         {
-            if(!$this->makeRequest($job))
-                $success = false;
+            $res = $this->makeRequest($job);
+            if(!empty($res) || is_null($res))
+                $success = true;
         }
 
         return $success;
@@ -143,6 +180,22 @@ class Yeelight implements YeelightInterface
     }
 
     /**
+     * Get a certain prop value
+     *
+     * @param string $prop
+     * @return string|null
+     * @throws Exception
+     */
+    protected function getProp(string $prop): string
+    {
+        if(!in_array($prop, self::ALLOWED_PROPS))
+            throw new Exception('Invalid prop supplied ' . $prop);
+
+        $job = $this->createJobArray('get_prop', [$prop]);
+        return $this->makeRequest($job);
+    }
+
+    /**
      * Check if the light is online.
      *
      * @throws Exception
@@ -156,11 +209,13 @@ class Yeelight implements YeelightInterface
     }
 
     /**
+     * Make a request to the light
+     *
      * @param array $job
-     * @return bool
+     * @return string|null
      * @throws Exception
      */
-    protected function makeRequest(array $job): bool
+    protected function makeRequest(array $job): ?string
     {
         $success = false;
 
@@ -171,21 +226,21 @@ class Yeelight implements YeelightInterface
         fwrite($this->socket, $requestStr, strlen($requestStr));
         fflush($this->socket);
 
-        usleep(100 * 700); // 0.7s -> wait for the light response
+        usleep(100 * 1000); // 1s -> wait for the light response
 
         $res = fgets($this->socket);
+
+        $resultStr = null;
 
         if($res)
         {
             $res = json_decode($res, true);
 
-            if(!array_key_exists('error', $res))
-                $success = true;
+            if(!array_key_exists('error', $res) && array_key_exists('result', $res))
+                $resultStr = $res['result'][0];
         }
-        else
-            $success = true;
 
-        return $success;
+        return $resultStr;
     }
 
     /**
@@ -195,12 +250,17 @@ class Yeelight implements YeelightInterface
      * @param array $params
      * @throws Exception
      */
-    private function createJob(string $method, array $params): void
+    protected function createJob(string $method, array $params): void
+    {
+        $this->jobs[] = $this->createJobArray($method, $params);
+    }
+
+    private function createJobArray(string $method, array $params): array
     {
         if(!in_array($method, self::ALLOWED_METHODS))
             throw new Exception('Invalid method supplied ' . $method);
 
-        $this->jobs[] = [
+        return [
             'id' => (count($this->jobs) + 1),
             'method' => $method,
             'params' => $params

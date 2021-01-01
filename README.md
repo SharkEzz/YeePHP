@@ -1,4 +1,4 @@
-# Yeelight-PHP
+# YeePHP
 ## A simple standalone PHP library to interact with Yeelight RGB bulbs (still in development)
 
 - [Introduction](#introduction)
@@ -45,8 +45,8 @@ It can as well be used in your 'from scratch' project or in the framework of you
 ### Currently implemented methods
 - [x] Set the color (RGB) of the light
 - [x] Set the light brightness
+- [ ] Set the light name
 - [ ] Get light infos
-- [ ] Set the light power
 - [ ] Color Flow control
 - [ ] Proper error handling
 

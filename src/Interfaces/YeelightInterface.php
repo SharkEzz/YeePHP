@@ -36,6 +36,27 @@ interface YeelightInterface
     public function getPort(): int;
 
     /**
+     * Return the current light brightness
+     *
+     * @return int
+     */
+    public function getBrightness(): int;
+
+    /**
+     * Return the current light color
+     *
+     * @return string
+     */
+    public function getColor(): string;
+
+    /**
+     * Return the current light name
+     *
+     * @return string
+     */
+    public function getName(): string;
+
+    /**
      * @param int $hexColor
      * @return $this
      */
@@ -48,6 +69,14 @@ interface YeelightInterface
      * @return $this
      */
     public function setBrightness(int $amount): self;
+
+    /**
+     * Set the light name
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setName(string $name): self;
 
     /**
      * Send the parameters to the light.

@@ -7,11 +7,28 @@ use SharkEzz\Yeelight\Interfaces\YeePHPInterface;
 
 class YeePHP implements YeePHPInterface
 {
+    /**
+     * The light IP adress
+     * @var string
+     */
     protected string $lightIP;
+
+    /**
+     * The light port (default: 55443)
+     * @var int
+     */
     protected int $lightPort;
 
+    /**
+     * The array containing all the jobs to do once the commit() method has been called
+     *
+     * @var array
+     */
     protected array $jobs = [];
 
+    /**
+     * The list of allowed methods
+     */
     public const ALLOWED_METHODS = [
         'get_prop',
         'toggle',
@@ -20,6 +37,9 @@ class YeePHP implements YeePHPInterface
         'set_rgb'
     ];
 
+    /**
+     * The list of allowed props for getting the light params
+     */
     public const ALLOWED_PROPS = [
         'bright',
         'rgb',
@@ -27,6 +47,8 @@ class YeePHP implements YeePHPInterface
     ];
 
     /**
+     * The socket connected to the light
+     *
      * @var resource
      */
     protected $socket;
@@ -53,6 +75,9 @@ class YeePHP implements YeePHPInterface
             throw new Exception('Can\'t connect to Yeelight device');
     }
 
+    /**
+     * Close the socket when finished
+     */
     public function __destruct()
     {
         fclose($this->socket);
@@ -60,7 +85,6 @@ class YeePHP implements YeePHPInterface
 
     /**
      * @inheritDoc
-     * @throws Exception
      */
     public function isOnline(): bool
     {
@@ -72,7 +96,7 @@ class YeePHP implements YeePHPInterface
      */
     public function isOn(): bool
     {
-        // TODO: Implement isOn() method.
+        return $this->getProp('power');
     }
 
     /**
@@ -93,7 +117,6 @@ class YeePHP implements YeePHPInterface
 
     /**
      * @inheritDoc
-     * @throws Exception
      */
     public function getBrightness(): int
     {
@@ -102,7 +125,6 @@ class YeePHP implements YeePHPInterface
 
     /**
      * @inheritDoc
-     * @throws Exception
      */
     public function getColor(): string
     {
@@ -111,7 +133,6 @@ class YeePHP implements YeePHPInterface
 
     /**
      * @inheritDoc
-     * @throws Exception
      */
     public function getName(): string
     {
@@ -120,7 +141,6 @@ class YeePHP implements YeePHPInterface
 
     /**
      * @inheritDoc
-     * @throws Exception
      */
     public function setColor(int $hexColor): self
     {
@@ -135,7 +155,6 @@ class YeePHP implements YeePHPInterface
 
     /**
      * @inheritDoc
-     * @throws Exception
      */
     public function setBrightness(int $amount): self
     {
@@ -154,6 +173,7 @@ class YeePHP implements YeePHPInterface
     }
 
     /**
+     * @inheritDoc
      * @throws Exception
      */
     public function commit(): bool

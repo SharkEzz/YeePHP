@@ -46,9 +46,12 @@ It can as well be used in your 'from scratch' project or in the framework of you
 - [x] Set the color (RGB) of the light
 - [x] Set the light brightness
 - [ ] Set the light name
-- [ ] Get light infos
+- [ ] Set the light power (on of off)
+- [x] Get light infos (partially completed)
 - [ ] Color Flow control
 - [ ] Proper error handling
+
+TODO : table with implemented methods
 
 <a name="examples"></a>
 #### Examples

@@ -57,7 +57,9 @@ interface YeePHPInterface
     public function getName(): string;
 
     /**
-     * @param int $hexColor
+     * Set the color of the light
+     *
+     * @param int $hexColor The light color in hexadecimal (eg: 0xFFFFFF)
      * @return $this
      */
     public function setColor(int $hexColor): self;

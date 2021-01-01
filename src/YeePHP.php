@@ -288,7 +288,7 @@ class YeePHP implements YeePHPInterface
             throw new Exception('Invalid method supplied ' . $method);
 
         return [
-            'id' => (count($this->jobs) + 1),
+            'id' => (count($this->jobs)),
             'method' => $method,
             'params' => $params
         ];

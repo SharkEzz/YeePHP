@@ -51,8 +51,6 @@ It can as well be used in your 'from scratch' project or in the framework of you
 - [ ] Color Flow control
 - [ ] Proper error handling
 
-TODO : table with implemented methods
-
 <a name="examples"></a>
 #### Examples
 

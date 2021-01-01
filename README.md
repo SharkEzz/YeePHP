@@ -45,7 +45,7 @@ It can as well be used in your 'from scratch' project or in the framework of you
 ### Currently implemented methods
 - [x] Set the color (RGB) of the light
 - [x] Set the light brightness
-- [ ] Set the light name
+- [x] Set the light name
 - [ ] Set the light power (on of off)
 - [x] Get light infos (partially completed)
 - [ ] Color Flow control

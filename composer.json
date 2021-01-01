@@ -1,5 +1,5 @@
 {
-    "name": "sharkezz/yeelight-php",
+    "name": "sharkezz/yeephp",
     "description": "A simple standalone PHP library to work with Yeelight RGB bulbs",
     "type": "library",
     "require": {

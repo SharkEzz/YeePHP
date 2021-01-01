@@ -57,6 +57,13 @@ interface YeePHPInterface
     public function getName(): string;
 
     /**
+     * Toggle the light
+     *
+     * @return bool
+     */
+    public function toggle(): self;
+
+    /**
      * Set the color of the light
      *
      * @param int $hexColor The light color in hexadecimal (eg: 0xFFFFFF)
@@ -75,10 +82,18 @@ interface YeePHPInterface
     /**
      * Set the light name
      *
-     * @param string $name
+     * @param string $name The name of the light
      * @return $this
      */
     public function setName(string $name): self;
+
+    /**
+     * Set the light on or off
+     *
+     * @param string $power The desired state, can be "on" or "off"
+     * @return $this
+     */
+    public function setPower(string $power): self;
 
     /**
      * Send the parameters to the light.

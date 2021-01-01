@@ -45,7 +45,7 @@ It can as well be used in your 'from scratch' project or in the framework of you
 - [x] Set the color (RGB) of the light
 - [x] Set the light brightness
 - [x] Set the light name
-- [ ] Set the light power (on of off)
+- [x] Set the light power (on of off)
 - [x] Get light infos (partially completed)
 - [ ] Color Flow control
 - [ ] Proper error handling

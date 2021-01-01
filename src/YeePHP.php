@@ -34,7 +34,8 @@ class YeePHP implements YeePHPInterface
         'toggle',
         'set_bright',
         'set_name',
-        'set_rgb'
+        'set_rgb',
+        'set_power'
     ];
 
     /**
@@ -53,6 +54,9 @@ class YeePHP implements YeePHPInterface
      * @var resource
      */
     protected $socket;
+
+    protected string $fadeEffect = 'smooth';
+    protected int $fadeDelay = 300;
 
     /**
      * Light constructor.
@@ -140,6 +144,13 @@ class YeePHP implements YeePHPInterface
         return $this->getProp('name');
     }
 
+    public function toggle(): self
+    {
+        $this->createJob('toggle', []);
+
+        return $this;
+    }
+
     /**
      * @inheritDoc
      */
@@ -147,8 +158,8 @@ class YeePHP implements YeePHPInterface
     {
         $this->createJob('set_rgb', [
             $hexColor,
-            'smooth',
-            500
+            $this->fadeEffect,
+            $this->fadeDelay
         ]);
 
         return $this;
@@ -173,9 +184,29 @@ class YeePHP implements YeePHPInterface
         return $this;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function setName(string $name): self
     {
         $this->createJob('set_name', [$name]);
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setPower(string $power): self
+    {
+        if(!$power === 'on' || !$power === 'off')
+            throw new Exception('Invalid power state: ' . $power);
+
+        $this->createJob('set_power', [
+            $power,
+            $this->fadeEffect,
+            $this->fadeDelay
+        ]);
 
         return $this;
     }

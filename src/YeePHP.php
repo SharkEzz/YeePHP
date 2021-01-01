@@ -234,7 +234,7 @@ class YeePHP implements YeePHPInterface
 
     protected function connect(): bool
     {
-        $sock = fsockopen($this->lightIP, $this->lightPort, $errCode, $errStr, 5);
+        $sock = fsockopen($this->lightIP, $this->lightPort, $errCode, $errStr, 3);
         if(!$sock) return false;
 
         stream_set_blocking($sock, false);
@@ -271,7 +271,7 @@ class YeePHP implements YeePHPInterface
      */
     protected function checkIsOnline(): bool
     {
-        if(feof($this->socket))
+        if(stream_get_meta_data($this->socket) === [])
             throw new Exception('Device is offline!');
 
         return true;
@@ -286,8 +286,6 @@ class YeePHP implements YeePHPInterface
      */
     protected function makeRequest(array $job): ?string
     {
-        $success = false;
-
         $this->checkIsOnline();
 
         $requestStr = json_encode($job) . "\r\n";

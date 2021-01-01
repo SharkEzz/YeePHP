@@ -23,6 +23,12 @@ class LightTest extends TestCase
         $this->light = new YeePHP($this->ip);
     }
 
+    public function testConstructorThrowExceptionIfTheIpAdressIsInvalid()
+    {
+        $this->expectException(\Exception::class);
+        new YeePHP('192.1555.0.0');
+    }
+
     public function testCanSeeIfLightIsOnline(): void
     {
         $this->assertTrue($this->light->isConnected());
@@ -42,12 +48,12 @@ class LightTest extends TestCase
 
     public function testLightCanChangeColorAndBrightness(): void
     {
-        $this->assertTrue(
-            $this->light
+        $res = $this->light
             ->setColor(0xFF8888)
             ->setBrightness(100)
-            ->commit()
-        );
+            ->commit();
+
+        $this->assertTrue($res);
     }
 
     public function testCanGetLightProps()

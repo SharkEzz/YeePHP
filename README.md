@@ -9,6 +9,10 @@
     - [Change light color](#change-color)
     - [Change light brightness](#change-brightness)
     - [Change many parameters at once](#change-many-at-once)
+    - [Toggle light](#toggle-light)
+    - [Set light name](#set-light-name)
+    - [Changing default port](#using-different-port)
+- [Available methods](#api-methods)
 - [Testing the library](#testing)
 - [Credits](#credits)
 
@@ -107,10 +111,85 @@ $yeelight->setBrightness(50)
     ->setColor(0x00FF00)
     ->commit();
 ```
+
+<a name="toggle-light"></a>
+##### Toggle the light
+
+```php
+<?php
+
+require_once './vendor/autoload.php';
+
+use SharkEzz\Yeelight\YeePHP;
+
+$yeelight = new YeePHP('192.168.0.15');
+
+// Set the light off
+$yeelight->setPower('off')->commit();
+
+// Set the light on
+$yeelight->setPower('on')->commit();
+```
+
+<a name="set-light-name"></a>
+##### Set the light name
+
+```php
+<?php
+
+require_once './vendor/autoload.php';
+
+use SharkEzz\Yeelight\YeePHP;
+
+$yeelight = new YeePHP('192.168.0.15');
+
+$yeelight->setName('YeelightLoremIpsum')->commit();
+```
+
+<a name="using-different-port"></a>
+##### Working with a different port
+
+All Yeelight RGB lights can be accessed by default on the port 55443, if your light doesn't use this port, no problems!
+
+You can set your light port in the constructor like this:
+
+```php
+<?php
+
+require_once './vendor/autoload.php';
+
+use SharkEzz\Yeelight\YeePHP;
+
+$yeelight = new YeePHP('192.168.0.15', 12345);
+```
+
+<a name="api-methods"></a>
+### API
+
+All the methods are documented in the class and in the interface, here it is a global reminder:
+
+| Name                | Parameters            | Return type | Description                                                                                              |
+|---------------------|-----------------------|-------------|----------------------------------------------------------------------------------------------------------|
+| __construct         | string $ip  int $port | null        | Class constructor                                                                                        |
+| isConnected         | x                     | bool        | Return true if the light is reacheable on the local network                                              |
+| isOn                | x                     | bool        | Return true if the light is turned on                                                                    |
+| getIP               | x                     | string      | Return the current light IP adress                                                                       |
+| getPort             | x                     | int         | Return the current light port                                                                            |
+| getBrightness       | x                     | int         | Return the current light brightness between 0 and 100                                                    |
+| getColor            | x                     | string      | return an hexadecimal representation or the light color                                                  |
+| getName             | x                     | string      | Return the current light name                                                                            |
+| toggle (deprecated) | x                     | self        | Toggle the light state (deprecated, use setPower instead)                                                |
+| setColor            | int $hexColor         | self        | Set the light color, must be an hexadecimal string (eg: 0xFFFFFF)                                        |
+| setBrightness       | int $amount           | self        | Set the light brightness, $amount must be between 0 and 100                                              |
+| setName             | string $name          | self        | Set the light name                                                                                       |
+| setPower            | string $power         | self        | Set the light power (off or on), $power must be "on" or "off"                                            |
+| commit              | x                     | bool        | Send all the jobs (previous commands) to the light, return true if the changes has been applied          |
+| disconnect          | x                     | bool        | Close the current opened socket to the light, return true if the socket has been closed, false otherwise |
+
 <a name="testing"></a>
 ### Testing
 
-If you want to test this library, make sure you have a working Yeelight RGB light in your local network.
+If you want to test this library, make sure you have a working Yeelight RGB light in your local network with LAN control enabled.
 
 You juste have to set the `$ip` variable in the `LightTest.php` file in the `tests` folder.
 

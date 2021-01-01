@@ -43,7 +43,8 @@ class YeePHP implements YeePHPInterface
     public const ALLOWED_PROPS = [
         'bright',
         'rgb',
-        'name'
+        'name',
+        'power'
     ];
 
     /**
@@ -86,7 +87,7 @@ class YeePHP implements YeePHPInterface
     /**
      * @inheritDoc
      */
-    public function isOnline(): bool
+    public function isConnected(): bool
     {
         return $this->checkIsOnline();
     }
@@ -158,6 +159,11 @@ class YeePHP implements YeePHPInterface
      */
     public function setBrightness(int $amount): self
     {
+        if($amount > 100)
+            $amount = 100;
+        else if($amount < 0)
+            $amount = 0;
+
         $this->createJob('set_bright', [
             $amount,
             'smooth',
@@ -167,9 +173,11 @@ class YeePHP implements YeePHPInterface
         return $this;
     }
 
-    public function setName(string $name): YeePHPInterface
+    public function setName(string $name): self
     {
-        // TODO: Implement setName() method.
+        $this->createJob('set_name', [$name]);
+
+        return $this;
     }
 
     /**
@@ -204,7 +212,7 @@ class YeePHP implements YeePHPInterface
     /**
      * Get a certain prop value
      *
-     * @param string $prop
+     * @param string $prop The prop name (refer to doc)
      * @return string|null
      * @throws Exception
      */
@@ -238,7 +246,7 @@ class YeePHP implements YeePHPInterface
     /**
      * Make a request to the light
      *
-     * @param array $job
+     * @param array $job The job created by the createJob() method
      * @return string|null
      * @throws Exception
      */
@@ -273,8 +281,8 @@ class YeePHP implements YeePHPInterface
     /**
      * Create a new job to be committed
      *
-     * @param string $method
-     * @param array $params
+     * @param string $method The method
+     * @param array $params The params
      * @throws Exception
      */
     protected function createJob(string $method, array $params): void

@@ -25,7 +25,7 @@ class LightTest extends TestCase
 
     public function testCanSeeIfLightIsOnline(): void
     {
-        $this->assertTrue($this->light->isOnline());
+        $this->assertTrue($this->light->isConnected());
     }
 
     public function testLightCanChangeColor(): void

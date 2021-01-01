@@ -12,7 +12,7 @@ interface YeePHPInterface
      *
      * @return bool
      */
-    public function isOnline(): bool;
+    public function isConnected(): bool;
 
     /**
      * Return true if the light is turned on, false otherwise

@@ -59,7 +59,8 @@ interface YeePHPInterface
     /**
      * Toggle the light
      *
-     * @return bool
+     * @deprecated Please use the setPower() method instead
+     * @return YeePHPInterface
      */
     public function toggle(): self;
 

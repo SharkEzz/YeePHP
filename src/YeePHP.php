@@ -145,7 +145,7 @@ class YeePHP implements YeePHPInterface
     }
 
     /**
-     * @deprecated Please use the setPower() method instead
+     * @inheritDoc
      */
     public function toggle(): self
     {

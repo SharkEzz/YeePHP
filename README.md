@@ -42,6 +42,9 @@ It can as well be used in your 'from scratch' project or in the framework of you
 
 <a name="implemented-methods"></a>
 ### Currently implemented methods
+
+*This list is temporary, expect more methods to come*
+
 - [x] Set the color (RGB) of the light
 - [x] Set the light brightness
 - [x] Set the light name

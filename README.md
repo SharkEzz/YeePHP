@@ -1,5 +1,4 @@
 # YeePHP
-## A simple standalone PHP library to interact with Yeelight RGB bulbs (still in development)
 
 - [Introduction](#introduction)
 - [Requirements](#requirements)

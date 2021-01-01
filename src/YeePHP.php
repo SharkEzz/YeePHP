@@ -144,6 +144,9 @@ class YeePHP implements YeePHPInterface
         return $this->getProp('name');
     }
 
+    /**
+     * @deprecated Please use the setPower() method instead
+     */
     public function toggle(): self
     {
         $this->createJob('toggle', []);

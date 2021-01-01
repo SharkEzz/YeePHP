@@ -3,9 +3,9 @@
 namespace SharkEzz\Yeelight;
 
 use Exception;
-use SharkEzz\Yeelight\Interfaces\YeelightInterface;
+use SharkEzz\Yeelight\Interfaces\YeePHPInterface;
 
-class Yeelight implements YeelightInterface
+class YeePHP implements YeePHPInterface
 {
     protected string $lightIP;
     protected int $lightPort;
@@ -93,18 +93,20 @@ class Yeelight implements YeelightInterface
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function getBrightness(): int
     {
-        // TODO: Implement getBrightness() method.
+        return dechex($this->getProp('bright'));
     }
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function getColor(): string
     {
-        // TODO: Implement getColor() method.
+        return dechex($this->getProp('rgb'));
     }
 
     /**
@@ -113,7 +115,7 @@ class Yeelight implements YeelightInterface
      */
     public function getName(): string
     {
-        // TODO: Implement getName() method.
+        return $this->getProp('name');
     }
 
     /**
@@ -146,7 +148,7 @@ class Yeelight implements YeelightInterface
         return $this;
     }
 
-    public function setName(string $name): YeelightInterface
+    public function setName(string $name): YeePHPInterface
     {
         // TODO: Implement setName() method.
     }
@@ -192,7 +194,12 @@ class Yeelight implements YeelightInterface
             throw new Exception('Invalid prop supplied ' . $prop);
 
         $job = $this->createJobArray('get_prop', [$prop]);
-        return $this->makeRequest($job);
+        $res = $this->makeRequest($job);
+
+        if(!$res)
+            $res = '';
+
+        return $res;
     }
 
     /**
@@ -226,7 +233,7 @@ class Yeelight implements YeelightInterface
         fwrite($this->socket, $requestStr, strlen($requestStr));
         fflush($this->socket);
 
-        usleep(100 * 1000); // 1s -> wait for the light response
+        usleep(100 * 700); // 0.7s -> wait for the light response
 
         $res = fgets($this->socket);
 

@@ -29,7 +29,7 @@ This library is all based on the official [documentation from Yeelight](https://
 
 <a name="how-to-install"></a>
 ### How to install
-- Require the library using Composer: `composer require sharkezz/yeelight-php`
+- Require the library using Composer: `composer require sharkezz/yeephp`
 - Require the composer autoloader (if it is not done yet)
 - Instantiate a new Yeelight object
 - Use it!
@@ -63,10 +63,10 @@ Imagine that the Yeelight has the IP 192.168.0.15 and is using the default port 
 
 require_once './vendor/autoload.php';
 
-use SharkEzz\Yeelight\Yeelight;
+use SharkEzz\Yeelight\YeePHP;
 
 // Create a new instance of Yeelight-PHP
-$yeelight = new Yeelight('192.168.0.15');
+$yeelight = new YeePHP('192.168.0.15');
 
 // Set the color of the light, notice that all the 'set' methods are fluent, it means that you can use them in chain !
 $yeelight->setColor(0xFF0000)
@@ -80,9 +80,9 @@ $yeelight->setColor(0xFF0000)
 
 require_once './vendor/autoload.php';
 
-use SharkEzz\Yeelight\Yeelight;
+use SharkEzz\Yeelight\YeePHP;
 
-$yeelight = new Yeelight('192.168.0.15');
+$yeelight = new YeePHP('192.168.0.15');
 
 $yeelight->setBrightness(50)
     ->commit();
@@ -96,9 +96,9 @@ $yeelight->setBrightness(50)
 
 require_once './vendor/autoload.php';
 
-use SharkEzz\Yeelight\Yeelight;
+use SharkEzz\Yeelight\YeePHP;
 
-$yeelight = new Yeelight('192.168.0.15');
+$yeelight = new YeePHP('192.168.0.15');
 
 $yeelight->setBrightness(50)
     ->setColor(0x00FF00)

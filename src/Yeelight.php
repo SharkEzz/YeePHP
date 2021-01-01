@@ -10,9 +10,6 @@ class Yeelight implements YeelightInterface
     protected string $lightIP;
     protected int $lightPort;
 
-    protected string $lightHexColor;
-    protected int $lightBrightness;
-
     protected array $jobs = [];
 
     public const ALLOWED_METHODS = [
@@ -32,11 +29,9 @@ class Yeelight implements YeelightInterface
      * Light constructor.
      * @param string $ip The light IP
      * @param int $port Light port (default 55443)
-     * @param int $lightColor Light color string in hexadecimal (eg: 0xFFFFFF)
-     * @param int $lightBrightness Light brightness (between 0 and 100)
      * @throws Exception
      */
-    public function __construct(string $ip, int $port = 55443, int $lightColor = 0xFFFFFF, int $lightBrightness = 100)
+    public function __construct(string $ip, int $port = 55443)
     {
         if(filter_var($ip, FILTER_VALIDATE_IP))
         {
@@ -47,15 +42,6 @@ class Yeelight implements YeelightInterface
             throw new Exception('Invalid IP address : ' . $ip);
         }
         $this->lightPort = $port;
-
-        $this->lightHexColor = $lightColor;
-
-        if($lightBrightness > 100)
-            $this->lightBrightness = 100;
-        else if($lightBrightness < 0)
-            $this->lightBrightness = 0;
-        else
-            $this->lightBrightness = $lightBrightness;
 
         if(!$this->connect())
             throw new Exception('Can\'t connect to Yeelight device');

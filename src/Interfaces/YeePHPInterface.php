@@ -101,4 +101,11 @@ interface YeePHPInterface
      * @return bool
      */
     public function commit(): bool;
+
+    /**
+     * Close the opened socket. Return true if the socket has been closed
+     *
+     * @return bool
+     */
+    public function disconnect(): bool;
 }

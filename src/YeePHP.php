@@ -85,7 +85,7 @@ class YeePHP implements YeePHPInterface
      */
     public function __destruct()
     {
-        fclose($this->socket);
+        $this->disconnect();
     }
 
     /**
@@ -159,6 +159,8 @@ class YeePHP implements YeePHPInterface
      */
     public function setColor(int $hexColor): self
     {
+        // TODO: check if the color is a valid hexadecimal number
+
         $this->createJob('set_rgb', [
             $hexColor,
             $this->fadeEffect,
@@ -232,6 +234,19 @@ class YeePHP implements YeePHPInterface
         return $success;
     }
 
+    public function disconnect(): bool
+    {
+        try
+        {
+            return fclose($this->socket);
+        }
+        catch (\TypeError $e)
+        {
+            return false;
+        }
+
+    }
+
     protected function connect(): bool
     {
         $sock = fsockopen($this->lightIP, $this->lightPort, $errCode, $errStr, 3);
@@ -271,7 +286,7 @@ class YeePHP implements YeePHPInterface
      */
     protected function checkIsOnline(): bool
     {
-        if(stream_get_meta_data($this->socket) === [])
+        if(socket_get_status($this->socket) === [])
             throw new Exception('Device is offline!');
 
         return true;

@@ -62,4 +62,15 @@ class LightTest extends TestCase
         $this->assertNotEmpty($this->light->getBrightness());
         $this->assertNotEmpty($this->light->getColor());
     }
+
+    public function testIfDisconnectMethodReturnTrueIfTheSocketHasBeenClosed()
+    {
+        $this->assertTrue($this->light->disconnect());
+    }
+
+    public function testIfDisconnectMethodReturnFalseIfTheSocketHasBeenAlreadyClosed()
+    {
+        $this->light->disconnect();
+        $this->assertFalse($this->light->disconnect());
+    }
 }

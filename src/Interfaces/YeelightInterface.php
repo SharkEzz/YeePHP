@@ -5,7 +5,7 @@ namespace SharkEzz\Yeelight\Interfaces;
 /**
  * Interface LightInterface
  */
-interface LightInterface
+interface YeelightInterface
 {
     /**
      * Return true if the light is reachable on the local network

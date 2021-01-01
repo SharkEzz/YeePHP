@@ -3,24 +3,21 @@
 namespace SharkEzz\Yeelight\Tests;
 
 use PHPUnit\Framework\TestCase;
-use SharkEzz\Yeelight\Light;
+use SharkEzz\Yeelight\Yeelight;
 
 class LightTest extends TestCase
 {
-    private Light $light;
+    private Yeelight $light;
 
     protected function setUp(): void
     {
         parent::setUp();
         /**
-         * You must use a real Yeelight RGB light in order to run this tests
+         * You must use a real Yeelight RGB light in order to run this tests and it must be turned on
          */
-        $this->light = new Light('192.168.0.103');
+        $this->light = new Yeelight('192.168.0.103');
     }
 
-    /**
-     * Light must be on
-     */
     public function testCanSeeIfLightIsOnline(): void
     {
         $this->assertTrue($this->light->isOnline());
@@ -42,8 +39,8 @@ class LightTest extends TestCase
     {
         $this->assertTrue(
             $this->light
-            ->setColor(0x00FF00)
-            ->setBrightness(50)
+            ->setColor(0xFF8888)
+            ->setBrightness(100)
             ->commit()
         );
     }

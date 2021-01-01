@@ -17,6 +17,7 @@
 ### Yeelight-PHP ?
 
 It's a very simple PHP library to allows you to communicate with your Yeelight RGB lights.
+
 This library is all based on the official [documentation from Yeelight](https://www.yeelight.com/download/Yeelight_Inter-Operation_Spec.pdf).
 
 <a name="requirements"></a>
@@ -37,6 +38,7 @@ This library is all based on the official [documentation from Yeelight](https://
 ### How does it work ?
 
 Yeelight-PHP use PHP sockets to communicate with your lights, that make it fast and reliable!
+
 It can as well be used in your 'from scratch' project or in the framework of your choice!
 
 <a name="implemented-methods"></a>
@@ -106,10 +108,14 @@ $yeelight->setBrightness(50)
 ### Testing
 
 If you want to test this library, make sure you have a working Yeelight RGB light in your local network.
+
 You juste have to set the `$ip` variable in the `LightTest.php` file in the `tests` folder.
+
 Then just run the PHPUnit executable: `./vendor/bin/phpunit`
 
 <a name="credits"></a>
 ### Credits
+
+[Official Yeelight documentation](https://www.yeelight.com/download/Yeelight_Inter-Operation_Spec.pdf)
 
 Inspired by [Yeelight-PHP from itskenny0](https://github.com/itskenny0/Yeelight-PHP)

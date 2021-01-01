@@ -1,6 +1,10 @@
 # Yeelight-PHP
 ## A simple standalone PHP library to interact with Yeelight RGB bulbs
 
+### How does it work ?
+
+TODO
+
 ### Requirements
  - PHP 7.4 or up (tested with PHP 8.0)
  - PHP sockets extension
@@ -8,6 +12,8 @@
 ### How to install
 #### With composer
  - `composer require sharkezz/yeelight-php`
+
+TODO
 
 ### How to use
 

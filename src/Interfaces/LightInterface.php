@@ -36,10 +36,10 @@ interface LightInterface
     public function getPort(): int;
 
     /**
-     * @param string $hexColor
+     * @param int $hexColor
      * @return $this
      */
-    public function setColor(string $hexColor): self;
+    public function setColor(int $hexColor): self;
 
     /**
      * Define the desired light brightness.
@@ -50,16 +50,7 @@ interface LightInterface
     public function setBrightness(int $amount): self;
 
     /**
-     * Define the light name
-     *
-     * @param string $name
-     * @return $this
-     */
-    public function setName(string $name): self;
-
-    /**
-     * Send the parameters to the light. Return true if the request has been successful, false otherwise
-     *
+     * Send the parameters to the light.
      * @return bool
      */
     public function commit(): bool;

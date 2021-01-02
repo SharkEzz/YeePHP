@@ -178,7 +178,7 @@ All the methods are documented in the class and in the interface, here it is a g
 | getBrightness       | x                     | int         | Return the current light brightness between 0 and 100                                                    |
 | getColor            | x                     | string      | return an hexadecimal representation or the light color                                                  |
 | getName             | x                     | string      | Return the current light name                                                                            |
-| toggle (deprecated) | x                     | self        | Toggle the light state (deprecated, use setPower instead)                                                |
+| toggle              | x                     | self        | Toggle the light state                                                                                   |
 | setColor            | int $hexColor         | self        | Set the light color, must be an hexadecimal string (eg: 0xFFFFFF)                                        |
 | setBrightness       | int $amount           | self        | Set the light brightness, $amount must be between 0 and 100                                              |
 | setName             | string $name          | self        | Set the light name                                                                                       |

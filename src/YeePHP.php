@@ -232,7 +232,7 @@ class YeePHP implements YeePHPInterface
         }
 
         $this->jobs = [];
-        
+
         return $success;
     }
 
@@ -319,6 +319,8 @@ class YeePHP implements YeePHPInterface
         if($res)
         {
             $res = json_decode($res, true);
+
+            var_dump($res);
 
             if(!array_key_exists('error', $res) && array_key_exists('result', $res))
                 $resultStr = $res['result'][0];

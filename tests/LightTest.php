@@ -2,17 +2,23 @@
 
 namespace SharkEzz\Yeelight\Tests;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use SharkEzz\Yeelight\YeePHP;
 
 class LightTest extends TestCase
 {
+    /**
+     * Set this variable to the IP of your light
+     *
+     * @var string
+     */
     private string $ip = '192.168.0.103';
 
     private YeePHP $light;
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     protected function setUp(): void
     {
@@ -25,7 +31,7 @@ class LightTest extends TestCase
 
     public function testConstructorThrowExceptionIfTheIpAdressIsInvalid()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         new YeePHP('192.1555.0.0');
     }
 

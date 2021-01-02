@@ -231,6 +231,8 @@ class YeePHP implements YeePHPInterface
                 $success = true;
         }
 
+        $this->jobs = [];
+        
         return $success;
     }
 

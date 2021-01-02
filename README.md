@@ -1,4 +1,4 @@
-# YeePHP
+# :bulb: YeePHP
 
 - [Introduction](#introduction)
 - [Requirements](#requirements)

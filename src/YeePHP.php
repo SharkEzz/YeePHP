@@ -466,7 +466,6 @@ class YeePHP implements YeePHPInterface
                 $result = $res['result'];
         }
 
-        var_dump($requestStr, json_encode($res));
 
         return $result;
     }

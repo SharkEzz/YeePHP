@@ -45,9 +45,10 @@ interface YeePHPInterface
     /**
      * Return the current light color
      *
+     * @param string $type The type of color 
      * @return string
      */
-    public function getColor(): string;
+    public function getColor(string $type): string;
 
     /**
      * Return the current light name

@@ -49,6 +49,9 @@ class YeePHP implements YeePHPInterface
     public const ALLOWED_PROPS = [
         'bright',
         'rgb',
+        'ct',
+        'hue',
+        'sat',
         'name',
         'power'
     ];
@@ -156,10 +159,23 @@ class YeePHP implements YeePHPInterface
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
-    public function getColor(): string
+    public function getColor(string $type = 'rgb'): string
     {
-        return dechex($this->getProp('rgb'));
+        if (!in_array($type, self::ALLOWED_COLOR_TYPES, true))
+            throw new Exception('Invalid color type ' . $type . ' available effects : ( ' . implode(" , ", self::ALLOWED_COLOR_TYPES) . ' )');
+
+        switch ($type) {
+            case 'ct':
+                return $this->getProp('ct');
+            case 'rgb':
+                return dechex($this->getProp('rgb'));
+            case 'hsv':
+                return $this->getProps(['hue', 'sat']);
+            default:
+                throw new Exception('Invalid color type !');
+        }
     }
 
     /**
@@ -188,7 +204,7 @@ class YeePHP implements YeePHPInterface
         if (!array_key_exists('type', $params))
             $params['type'] = 'rgb';
         if (!in_array($params['type'], self::ALLOWED_COLOR_TYPES, true))
-            throw new Exception('Invalid color type ' . $params['type'] . ' available effects : ' . implode(" ", self::ALLOWED_COLOR_TYPES));
+            throw new Exception('Invalid color type ' . $params['type'] . ' available effects : ( ' . implode(" , ", self::ALLOWED_COLOR_TYPES) . ' )');
 
         $params = $this->checkColorValue($color, $params);
         $params = $this->checkFadeParams($params);
@@ -316,6 +332,27 @@ class YeePHP implements YeePHPInterface
             throw new Exception('Invalid prop supplied ' . $prop);
 
         $job = $this->createJobArray('get_prop', [$prop]);
+        $res = $this->makeRequest($job);
+
+        if (!$res)
+            $res = '';
+
+        return $res;
+    }
+
+    /**
+     * Get a certain prop value
+     *
+     * @param string $prop The prop name (refer to doc)
+     * @return string|null
+     * @throws Exception
+     */
+    protected function getProps(array $props): string
+    {
+        if (!self::array_every(fn ($value) => in_array($value, self::ALLOWED_PROPS), $props))
+            throw new Exception('Invalid props supplied ' . $props);
+
+        $job = $this->createJobArray('get_prop', $props);
         $res = $this->makeRequest($job);
 
         if (!$res)
@@ -516,5 +553,15 @@ class YeePHP implements YeePHPInterface
             default:
                 throw new Exception('Invalid color type !');
         }
+    }
+
+    private static function array_every(callable $callback, $arr)
+    {
+        foreach ($arr as $ele) {
+            if (!call_user_func($callback, $ele)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

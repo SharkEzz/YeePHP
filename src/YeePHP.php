@@ -41,7 +41,8 @@ class YeePHP implements YeePHPInterface
         'set_default',
         'set_ct_abx',
         'set_hsv',
-        'start_cf'
+        'start_cf',
+        'stop_cf'
     ];
 
     /**
@@ -257,6 +258,19 @@ class YeePHP implements YeePHPInterface
         $this->createJob('start_cf', $params);
 
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function stopColorFlow(): void
+    {
+        $job = $this->createJobArray('stop_cf', []);
+
+        $res = $this->makeRequest($job);
+
+        if (!$res)
+            throw new Exception('Error during stoping color flow');
     }
 
     /**

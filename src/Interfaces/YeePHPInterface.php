@@ -82,6 +82,11 @@ interface YeePHPInterface
      */
     public function startColorFlow(array $flowExpression, string $action): self;
 
+    /**
+     * Stop the current color flow
+     *
+     */
+    public function stopColorFlow(): void;
 
     /**
      * Define the desired light brightness.

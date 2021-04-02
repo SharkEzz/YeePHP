@@ -74,6 +74,16 @@ interface YeePHPInterface
     public function setColor(int $color, array $params): self;
 
     /**
+     * Start a color flow
+     *
+     * @param array $flowExpression Array of expressions, they must be profide duration (ms), mode (1, 2 or 7), value (color temperature or rgb hexa) and bright (0 - 100) in order
+     * @param string $action The action when flow is finished
+     * @return $this
+     */
+    public function startColorFlow(array $flowExpression, string $action): self;
+
+
+    /**
      * Define the desired light brightness.
      *
      * @param int $amount The brightness between 1 and 100

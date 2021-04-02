@@ -40,7 +40,8 @@ class YeePHP implements YeePHPInterface
         'set_power',
         'set_default',
         'set_ct_abx',
-        'set_hsv'
+        'set_hsv',
+        'start_cf'
     ];
 
     /**
@@ -74,6 +75,15 @@ class YeePHP implements YeePHPInterface
     ];
 
     /**
+     * The list of allowed color flow actions
+     */
+    public const ALLOWED_FLOW_ACTIONS = [
+        "recover",
+        "stay",
+        "turnoff"
+    ];
+
+    /**
      * The default fade effect
      */
     public const DEDAULT_FADE_EFFECT = 'smooth';
@@ -82,6 +92,11 @@ class YeePHP implements YeePHPInterface
      * The default fade delay
      */
     public const DEDAULT_FADE_DELAY = 300;
+
+    /**
+     * The default color flow action
+     */
+    public const DEDAULT_FLOW_ACTION = "recover";
 
     /**
      * The socket connected to the light
@@ -212,6 +227,34 @@ class YeePHP implements YeePHPInterface
         $params = $this->checkFadeParams($params);
 
         $this->createColorJob($color, $params);
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function startColorFlow(array $flowExpression, string $action = self::DEDAULT_FLOW_ACTION): self
+    {
+        if (count($flowExpression) == 0)
+            throw new Exception('Flow expression can\'t be empty !');
+
+        if (!in_array($action, self::ALLOWED_FLOW_ACTIONS, true))
+            throw new Exception('Invalid action type ' . $action . ' available actions : ( ' . implode(" , ", self::ALLOWED_FLOW_ACTIONS) . ' )');
+
+        try {
+            self::array_every(fn ($expression) => $this->checkExpression($expression), $flowExpression);
+        } catch (Exception $e) {
+            throw new Exception('Invalid flow expression ! ' . $e->getMessage());
+        }
+
+        $params = [
+            count($flowExpression),
+            array_search($action, self::ALLOWED_FLOW_ACTIONS),
+            implode(",", array_merge(...$flowExpression))
+        ];
+
+        $this->createJob('start_cf', $params);
 
         return $this;
     }
@@ -518,6 +561,41 @@ class YeePHP implements YeePHPInterface
         }
 
         return $params;
+    }
+
+    private function checkExpression($expression)
+    {
+        if (!is_array($expression))
+            throw new Exception("Expression must be an aray !");
+
+        if (count($expression) !== 4)
+            throw new Exception("Expression must have 4 values !");
+
+        $duration = $expression[0];
+        $mode = $expression[1];
+        $value = $expression[2];
+        $bright = $expression[3];
+
+        if (!in_array($mode, [1, 2, 7], true))
+            throw new Exception('Invalid expression mode ' . $mode . ' available modes : ( ' . implode(" , ", [1, 2, 7]) . ' )');
+
+        if (!is_integer($duration))
+            throw new Exception('Invalid expression duration ' . $duration . ', must be an integer !');
+
+        if (!is_integer($value))
+            throw new Exception('Invalid expression value ' . $value . ', must be an integer !');
+
+        if (!is_integer($bright))
+            throw new Exception('Invalid expression bright ' . $bright . ', must be an integer !');
+
+        if ($bright != -1 && ($bright < 1 || $bright > 100))
+            throw new Exception('Invalid expression bright ' . $bright . ', must -1 to be skipped or be range from 1 to 100 !');
+
+        if ($mode == 1 && ($value < 0 || $value > 16777215))
+            throw new Exception('Invalid expression value ' . $value . ', must be range from 0 to 16777215 !');
+
+        if ($mode == 2 && ($value < 1700 || $value > 6500))
+            throw new Exception('Invalid expression value ' . $value . ', must be range from 1700 to 6500 !');
     }
 
     /**

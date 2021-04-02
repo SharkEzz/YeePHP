@@ -130,7 +130,7 @@ class YeePHP implements YeePHPInterface
      */
     public function isOn(): bool
     {
-        return $this->getProp('power');
+        return $this->getProp('power')[0] == 'on';
     }
 
     /**
@@ -152,27 +152,29 @@ class YeePHP implements YeePHPInterface
     /**
      * @inheritDoc
      */
-    public function getBrightness(): string
+    public function getBrightness(): int
     {
-        return dechex($this->getProp('bright'));
+        return intval($this->getProp('bright')[0]);
     }
 
     /**
      * @inheritDoc
      * @throws Exception
      */
-    public function getColor(string $type = 'rgb'): string
+    public function getColor(string $type = 'rgb'): array
     {
         if (!in_array($type, self::ALLOWED_COLOR_TYPES, true))
             throw new Exception('Invalid color type ' . $type . ' available effects : ( ' . implode(" , ", self::ALLOWED_COLOR_TYPES) . ' )');
 
         switch ($type) {
             case 'ct':
-                return $this->getProp('ct');
+                return ["ct" => $this->getProp('ct')[0]];
             case 'rgb':
-                return dechex($this->getProp('rgb'));
-            case 'hsv':
-                return $this->getProps(['hue', 'sat']);
+                return ["rgb" => dechex($this->getProp('rgb')[0])];
+            case 'hsv': {
+                    $res = $this->getProps(['hue', 'sat']);
+                    return ['hue' => $res[0], 'sat' => $res[1]];
+                }
             default:
                 throw new Exception('Invalid color type !');
         }
@@ -183,7 +185,7 @@ class YeePHP implements YeePHPInterface
      */
     public function getName(): string
     {
-        return $this->getProp('name');
+        return $this->getProp('name')[0];
     }
 
     /**
@@ -323,19 +325,20 @@ class YeePHP implements YeePHPInterface
      * Get a certain prop value
      *
      * @param string $prop The prop name (refer to doc)
-     * @return string|null
+     * @return array|null
      * @throws Exception
      */
-    protected function getProp(string $prop): string
+    protected function getProp(string $prop): ?array
     {
         if (!in_array($prop, self::ALLOWED_PROPS))
             throw new Exception('Invalid prop supplied ' . $prop);
 
         $job = $this->createJobArray('get_prop', [$prop]);
+
         $res = $this->makeRequest($job);
 
-        if (!$res)
-            $res = '';
+        if ($res[0] == "ok")
+            throw new Exception('Problem in result'); // TODO
 
         return $res;
     }
@@ -344,19 +347,20 @@ class YeePHP implements YeePHPInterface
      * Get a certain prop value
      *
      * @param string $prop The prop name (refer to doc)
-     * @return string|null
+     * @return array|null
      * @throws Exception
      */
-    protected function getProps(array $props): string
+    protected function getProps(array $props): ?array
     {
         if (!self::array_every(fn ($value) => in_array($value, self::ALLOWED_PROPS), $props))
             throw new Exception('Invalid props supplied ' . $props);
 
         $job = $this->createJobArray('get_prop', $props);
+
         $res = $this->makeRequest($job);
 
-        if (!$res)
-            $res = '';
+        if ($res[0] == "ok")
+            throw new Exception('Problem in result'); // TODO
 
         return $res;
     }
@@ -378,10 +382,10 @@ class YeePHP implements YeePHPInterface
      * Make a request to the light
      *
      * @param array $job The job created by the createJob() method
-     * @return string|null
+     * @return array|null
      * @throws Exception
      */
-    protected function makeRequest(array $job): ?string
+    protected function makeRequest(array $job): ?array
     {
         $this->checkIsOnline();
 
@@ -396,18 +400,18 @@ class YeePHP implements YeePHPInterface
         $res = fgets($this->socket);
 
 
-        $resultStr = null;
+        $result = null;
 
         if (!empty($res)) {
             $res = json_decode($res, true);
 
             if (!array_key_exists('error', $res) && array_key_exists('result', $res))
-                $resultStr = $res['result'][0];
+                $result = $res['result'];
         }
 
-        var_dump($requestStr, $res);
+        var_dump($requestStr, json_encode($res));
 
-        return $resultStr;
+        return $result;
     }
 
     /**

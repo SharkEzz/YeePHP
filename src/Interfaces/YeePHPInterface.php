@@ -40,15 +40,15 @@ interface YeePHPInterface
      *
      * @return int
      */
-    public function getBrightness(): string;
+    public function getBrightness(): int;
 
     /**
      * Return the current light color
      *
      * @param string $type The type of color 
-     * @return string
+     * @return array
      */
-    public function getColor(string $type): string;
+    public function getColor(string $type): array;
 
     /**
      * Return the current light name

@@ -40,7 +40,7 @@ interface YeePHPInterface
      *
      * @return int
      */
-    public function getBrightness(): int;
+    public function getBrightness(): string;
 
     /**
      * Return the current light color
@@ -66,10 +66,11 @@ interface YeePHPInterface
     /**
      * Set the color of the light
      *
-     * @param int $hexColor The light color in hexadecimal (eg: 0xFFFFFF)
+     * @param int $color The light color value in hexadecimal, color temperature or hue (eg: 0xFFFFFF)
+     * @param array $params The parameters for the color change.
      * @return $this
      */
-    public function setColor(int $hexColor): self;
+    public function setColor(int $color, array $params): self;
 
     /**
      * Define the desired light brightness.
@@ -94,6 +95,13 @@ interface YeePHPInterface
      * @return $this
      */
     public function setPower(string $power): self;
+
+    /**
+     * Save the current state to the device memory
+     *
+     * @return $this
+     */
+    public function setDefault(): self;
 
     /**
      * Send the parameters to the light.

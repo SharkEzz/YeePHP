@@ -372,7 +372,7 @@ class YeePHP implements YeePHPInterface
         $sock = fsockopen($this->lightIP, $this->lightPort, $errCode, $errStr, 30);
         if (!$sock) return false;
 
-        // stream_set_blocking($sock, false);
+        stream_set_blocking($sock, false);
         $this->socket = $sock;
 
         return true;
@@ -451,10 +451,11 @@ class YeePHP implements YeePHPInterface
         fwrite($this->socket, $requestStr);
         fflush($this->socket);
 
-        // usleep(100 * 1000); // 0.7s -> wait for the light response 
+        usleep(100 * 1000); // 0.7s -> wait for the light response 
 
-
-        $res = fgets($this->socket);
+        $res = '';
+        while ($out = stream_get_line($this->socket, 4096, "\r\n"))
+            $res = $out;
 
 
         $result = null;
@@ -464,9 +465,9 @@ class YeePHP implements YeePHPInterface
 
             if (!array_key_exists('error', $res) && array_key_exists('result', $res))
                 $result = $res['result'];
+        } else {
+            throw new Exception('No response received from device !');
         }
-
-        var_dump($requestStr, json_encode($res));
 
         return $result;
     }

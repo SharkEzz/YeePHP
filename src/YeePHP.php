@@ -107,6 +107,13 @@ class YeePHP implements YeePHPInterface
     protected $socket;
 
     /**
+     * Current status of the socket
+     * 
+     * @var string
+     */
+    protected $is_connected = false;
+
+    /**
      * Light constructor.
      * @param string $ip The light IP
      * @param int $port Light port (default 55443)
@@ -353,11 +360,12 @@ class YeePHP implements YeePHPInterface
      */
     public function disconnect(): bool
     {
-        try {
+        if($this->is_connected)
+        {
+            $this->is_connected = false;
             return fclose($this->socket);
-        } catch (Exception $e) {
-            return false;
         }
+        else return false;
     }
 
 
@@ -374,6 +382,7 @@ class YeePHP implements YeePHPInterface
 
         stream_set_blocking($sock, false);
         $this->socket = $sock;
+        $this->is_connected = true;
 
         return true;
     }
@@ -394,7 +403,7 @@ class YeePHP implements YeePHPInterface
 
         $res = $this->makeRequest($job);
 
-        if ($res[0] == "ok")
+        if ($res[0] !== "ok")
             throw new Exception('Problem in result'); // TODO
 
         return $res;
@@ -430,7 +439,11 @@ class YeePHP implements YeePHPInterface
     protected function checkIsOnline(): bool
     {
         if (socket_get_status($this->socket) === [])
-            throw new Exception('Device is offline!');
+        {
+            $this->is_connected = false;
+            throw new Exception('Device disconnected!');
+        }
+            
 
         return true;
     }
@@ -466,7 +479,7 @@ class YeePHP implements YeePHPInterface
             if (!array_key_exists('error', $res) && array_key_exists('result', $res))
                 $result = $res['result'];
         } else {
-            throw new Exception('No response received from device !');
+            return null;
         }
 
         return $result;
@@ -483,9 +496,6 @@ class YeePHP implements YeePHPInterface
     {
         $this->jobs[] = $this->createJobArray($method, $params);
     }
-
-
-
 
     /**
      * Convert an method and his params into a job array

@@ -13,7 +13,7 @@ class LightTest extends TestCase
      *
      * @var string
      */
-    private string $ip = '192.168.0.104';
+    private string $ip = '192.168.0.103';
 
     private YeePHP $light;
 

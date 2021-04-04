@@ -12,6 +12,20 @@ interface SocketInterface
     public const PACKET_LENGTH = 4096;
 
     /**
+     * Return the current IP
+     *
+     * @return string
+     */
+    public function getIP(): string;
+
+    /**
+     * Return the current port number
+     *
+     * @return int
+     */
+    public function getPort(): int;
+
+    /**
      * Return the current status of the socket.
      *
      * @return bool The socket status, true is connected, false otherwise
@@ -46,4 +60,11 @@ interface SocketInterface
      * @return string|null Return the read data, null if there is none
      */
     public function read(): ?string;
+
+    /**
+     * Get the latest socket error (if there is one)
+     *
+     * @return string|null
+     */
+    public function getSocketError(): ?string;
 }

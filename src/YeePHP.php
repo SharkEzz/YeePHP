@@ -7,6 +7,9 @@ namespace SharkEzz\Yeelight;
 use Exception;
 use SharkEzz\Yeelight\Interfaces\YeePHPInterface;
 
+/**
+ * Main YeePHP class
+ */
 class YeePHP implements YeePHPInterface
 {
     /**
@@ -87,12 +90,12 @@ class YeePHP implements YeePHPInterface
     /**
      * The default fade effect
      */
-    public const DEDAULT_FADE_EFFECT = 'smooth';
+    public const DEFAULT_FADE_EFFECT = 'smooth';
 
     /**
      * The default fade delay
      */
-    public const DEDAULT_FADE_DELAY = 300;
+    public const DEFAULT_FADE_DELAY = 300;
 
     /**
      * The default color flow action
@@ -319,8 +322,8 @@ class YeePHP implements YeePHPInterface
 
         $this->createJob('set_power', [
             $power,
-            self::DEDAULT_FADE_EFFECT,
-            self::DEDAULT_FADE_DELAY
+            self::DEFAULT_FADE_EFFECT,
+            self::DEFAULT_FADE_DELAY
         ]);
 
         return $this;
@@ -470,7 +473,6 @@ class YeePHP implements YeePHPInterface
         while ($out = stream_get_line($this->socket, 4096, "\r\n"))
             $res = $out;
 
-
         $result = null;
 
         if (!empty($res)) {
@@ -563,7 +565,7 @@ class YeePHP implements YeePHPInterface
      * @return array
      * @throws Exception
      */
-    private function checkFadeParams(array $params, string $defaultFadeEffect = self::DEDAULT_FADE_EFFECT)
+    private function checkFadeParams(array $params, string $defaultFadeEffect = self::DEFAULT_FADE_EFFECT)
     {
         if (array_key_exists('effect', $params)) {
             if (!in_array($params['effect'], self::ALLOWED_FADE_EFFECTS))
@@ -581,7 +583,7 @@ class YeePHP implements YeePHPInterface
                 if ($params['delay'] < 30 || $params['delay'] > 3000)
                     throw new Exception('Invalid delay value ' . $params['delay'] . '! value must be range from 30 to 3000');
             } else {
-                $params['delay'] = self::DEDAULT_FADE_DELAY;
+                $params['delay'] = self::DEFAULT_FADE_DELAY;
             }
         }
 

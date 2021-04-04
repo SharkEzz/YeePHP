@@ -409,14 +409,13 @@ class YeePHP implements YeePHPInterface
         if ($res[0] !== "ok")
             throw new Exception('Problem in result'); // TODO
 
-
         return $res;
     }
 
     /**
      * Get a certain prop value
      *
-     * @param string $prop The prop name (refer to doc)
+     * @param array $props
      * @return array|null
      * @throws Exception
      */
@@ -465,11 +464,9 @@ class YeePHP implements YeePHPInterface
 
         $res = $this->socket->sendData($requestStr);
 
-        var_dump($res);
-
         $result = null;
 
-        if (!empty($res)) {
+        if ($res) {
             if (!array_key_exists('error', $res) && array_key_exists('result', $res))
                 $result = $res['result'];
         } else {

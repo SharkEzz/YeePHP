@@ -1,6 +1,6 @@
 <?php
 
-namespace SharkEzz\YeePHP;
+namespace SharkEzz\Yeelight;
 
 class Discovery
 {

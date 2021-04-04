@@ -17,10 +17,19 @@ class Socket implements SocketInterface
      */
     private $socket;
 
+    /**
+     * Light IP
+     */
     private string $ip;
 
+    /**
+     * Light port
+     */
     private int $port;
 
+    /**
+     * The status of the socket
+     */
     private bool $isConnected = false;
 
     public function __construct(string $ip, int $port = 55443)
@@ -34,22 +43,34 @@ class Socket implements SocketInterface
         socket_set_block($this->socket);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getIP(): string
     {
         return $this->ip;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getPort(): int
     {
         return $this->port;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function isSocketConnected(): bool
     {
         // TODO : optimize this
         return $this->isConnected;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function connect(): bool
     {
         if(socket_connect($this->socket, $this->ip, $this->port))
@@ -60,6 +81,9 @@ class Socket implements SocketInterface
         else return false;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function disconnect(): bool
     {
         $this->isConnected = false;
@@ -68,14 +92,13 @@ class Socket implements SocketInterface
         return true;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function sendData(string $data): ?array
     {
-        if($data[-2] !== "\r" && $data[-1] !== "\n")
-        {
-            print 'not ending with :(';
+        if(substr($data, strlen($data) - 2, 2) !== "\r\n")
             $data .= "\r\n";
-        }
-
 
         if(socket_write($this->socket, $data, strlen($data)))
         {
@@ -89,6 +112,9 @@ class Socket implements SocketInterface
             throw new \Exception("Can't write into the socket");
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getSocketError(): ?string
     {
         $err = socket_last_error($this->socket);

@@ -70,7 +70,7 @@ class YeePHP implements YeePHPInterface
     ];
 
     /**
-     * The list of allowed fade effects
+     * The list of allowed color types
      */
     public const ALLOWED_COLOR_TYPES = [
         'ct',

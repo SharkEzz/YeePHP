@@ -3,7 +3,8 @@
 namespace SharkEzz\Yeelight\Net;
 
 /**
- * Network light discovery
+ * Class Discovery
+ * @package SharkEzz\Yeelight\Net
  */
 class Discovery
 {
@@ -18,11 +19,6 @@ class Discovery
      * @var resource The socket
      */
     private $socket;
-
-    /**
-     * @var array Bulbs array
-     */
-    private $bulbs;
 
     public function __construct()
     {
@@ -42,12 +38,14 @@ class Discovery
         );
 
         if(!$result)
-            throw new \Exception('Socket exception');
+            throw new \Exception('SocketInterface exception');
 
         $res = socket_read($this->socket, 4096);
 
         if(!$res)
-            throw new \Exception('Socket exception');
+            throw new \Exception('SocketInterface exception');
+        
+        socket_close($this->socket);
         
         return [];
     }

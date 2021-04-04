@@ -64,24 +64,29 @@ class Socket implements SocketInterface
     {
         $this->isConnected = false;
         socket_close($this->socket);
+
+        return true;
     }
 
-    public function write(string $data): bool
+    public function sendData(string $data): ?array
     {
+        if($data[-2] !== "\r" && $data[-1] !== "\n")
+        {
+            print 'not ending with :(';
+            $data .= "\r\n";
+        }
+
+
         if(socket_write($this->socket, $data, strlen($data)))
-            return true;
+        {
+            if($result = socket_read($this->socket, self::PACKET_LENGTH, PHP_BINARY_READ))
+            {
+                return json_decode($result, true);
+            }
+            else return null;
+        }
         else
-            return false;
-    }
-
-    public function read(): ?string
-    {
-        $data = socket_read($this->socket, self::PACKET_LENGTH, PHP_BINARY_READ);
-
-        if(!$data)
-            throw new \Exception('Can\'t read from socket');
-
-        return $data;
+            throw new \Exception("Can't write into the socket");
     }
 
     public function getSocketError(): ?string

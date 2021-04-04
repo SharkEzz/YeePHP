@@ -47,19 +47,12 @@ interface SocketInterface
     public function disconnect(): bool;
 
     /**
-     * Write data to the socket
+     * Send data via the socket and read the response if there is one
      *
      * @param string $data
-     * @return bool True if the data has been successfully wrote, false otherwise
+     * @return array|null Return the decoded json response if there is one, null otherwise
      */
-    public function write(string $data): bool;
-
-    /**
-     * Read and return the data in the socket buffer
-     *
-     * @return string|null Return the read data, null if there is none
-     */
-    public function read(): ?string;
+    public function sendData(string $data): ?array;
 
     /**
      * Get the latest socket error (if there is one)

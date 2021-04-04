@@ -6,6 +6,7 @@ namespace SharkEzz\Yeelight;
 
 use Exception;
 use SharkEzz\Yeelight\Interfaces\YeePHPInterface;
+use SharkEzz\Yeelight\Net\Socket;
 
 /**
  * Main YeePHP class
@@ -105,7 +106,7 @@ class YeePHP implements YeePHPInterface
     /**
      * The socket connected to the light
      *
-     * @var resource
+     * @var Socket
      */
     protected $socket;
 
@@ -366,7 +367,7 @@ class YeePHP implements YeePHPInterface
         if($this->is_connected)
         {
             $this->is_connected = false;
-            return fclose($this->socket);
+            return $this->socket->disconnect();
         }
         else return false;
     }
@@ -380,14 +381,13 @@ class YeePHP implements YeePHPInterface
      */
     protected function connect(): bool
     {
-        $sock = fsockopen($this->lightIP, $this->lightPort, $errCode, $errStr, 30);
-        if (!$sock) return false;
-
-        stream_set_blocking($sock, false);
-        $this->socket = $sock;
-        $this->is_connected = true;
-
-        return true;
+        $this->socket = new Socket($this->lightIP, $this->lightPort);
+        if($this->socket->connect())
+        {
+            $this->is_connected = true;
+            return true;
+        }
+        else return false;
     }
 
     /**
@@ -408,6 +408,7 @@ class YeePHP implements YeePHPInterface
 
         if ($res[0] !== "ok")
             throw new Exception('Problem in result'); // TODO
+
 
         return $res;
     }
@@ -441,14 +442,12 @@ class YeePHP implements YeePHPInterface
      */
     protected function checkIsOnline(): bool
     {
-        if (socket_get_status($this->socket) === [])
+        if (!$this->socket->isSocketConnected())
         {
             $this->is_connected = false;
             throw new Exception('Device disconnected!');
         }
-            
-
-        return true;
+        else return true;
     }
 
     /**
@@ -464,20 +463,13 @@ class YeePHP implements YeePHPInterface
 
         $requestStr = json_encode($job) . "\r\n";
 
-        fwrite($this->socket, $requestStr);
-        fflush($this->socket);
+        $res = $this->socket->sendData($requestStr);
 
-        usleep(100 * 1000); // 0.7s -> wait for the light response 
-
-        $res = '';
-        while ($out = stream_get_line($this->socket, 4096, "\r\n"))
-            $res = $out;
+        var_dump($res);
 
         $result = null;
 
         if (!empty($res)) {
-            $res = json_decode($res, true);
-
             if (!array_key_exists('error', $res) && array_key_exists('result', $res))
                 $result = $res['result'];
         } else {

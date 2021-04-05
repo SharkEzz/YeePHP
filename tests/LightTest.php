@@ -62,10 +62,18 @@ class LightTest extends TestCase
         $this->assertTrue($res);
     }
 
-    public function testCanGetLightProps()
+    public function testCanGetLightName()
     {
         $this->assertNotEmpty($this->light->getName());
+    }
+
+    public function testCanGetLightBrightness()
+    {
         $this->assertNotEmpty($this->light->getBrightness());
+    }
+
+    public function testCanGetLightRGB()
+    {
         $this->assertNotEmpty($this->light->getColor());
     }
 

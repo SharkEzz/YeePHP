@@ -86,10 +86,14 @@ class Socket implements SocketInterface
      */
     public function disconnect(): bool
     {
-        $this->isConnected = false;
-        socket_close($this->socket);
+        if($this->isConnected)
+        {
+            $this->isConnected = false;
+            socket_close($this->socket);
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
     /**
@@ -97,15 +101,15 @@ class Socket implements SocketInterface
      */
     public function sendData(string $data): ?array
     {
-        if(substr($data, strlen($data) - 2, 2) !== "\r\n")
+        if(substr($data, -2) !== "\r\n")
             $data .= "\r\n";
 
-        if(socket_write($this->socket, $data, strlen($data)))
+        if(socket_send($this->socket, $data, strlen($data), 0))
         {
-            if($result = socket_read($this->socket, self::PACKET_LENGTH, PHP_BINARY_READ))
-            {
-                return json_decode($result, true);
-            }
+            $res = socket_read($this->socket, self::PACKET_LENGTH, PHP_BINARY_READ);
+
+            if($res !== '')
+                return json_decode($res, true);
             else return null;
         }
         else
